@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Code Switcher</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Basic Color Palette */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #282c34; /* Dark background */
+            color: #f0f0f0; /* Light text */
+            display: flex;
+            flex-direction: column; /* Arrange content vertically */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        /* Homescreen Header Styling */
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            max-width: 700px; /* Max width for the header text */
+            width: 100%;
+            padding: 0 15px; /* Padding for smaller screens */
+            box-sizing: border-box;
+        }
+
+        .page-header h1 {
+            font-size: 2.8em; /* Large title */
+            font-weight: 700;
+            color: #f0f0f0;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            font-size: 1em;
+            color: #b0b0b0; /* Lighter text for description */
+            line-height: 1.5;
+        }
+
+        /* Main Code Switcher Container */
+        .code-switcher-container {
+            background-color: #333740; /* Slightly lighter dark background */
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+            overflow: hidden; /* Ensures rounded corners clip content */
+            border: 1px solid #444; /* Subtle border */
+        }
+
+        /* Tab Buttons Section */
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #444;
+        }
+
+        .tab-button {
+            flex: 1; /* Distribute space evenly */
+            padding: 15px 0;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #b0b0b0; /* Inactive tab text */
+            background-color: #3a3f47; /* Inactive tab background */
+            border: none;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            text-align: center;
+        }
+
+        .tab-button:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        .tab-button:last-child {
+            border-top-right-radius: 10px;
+        }
+
+        .tab-button:hover:not(.active) {
+            background-color: #4a4f58; /* Darker hover for inactive */
+            color: #f0f0f0;
+        }
+
+        .tab-button.active {
+            background-color: #4f5560; /* Active tab background */
+            color: #ffffff; /* Active tab text */
+            /* Simple bottom border for active tab */
+            border-bottom: 3px solid #61dafb; /* A vibrant blue for active tab */
+        }
+
+        /* Code Display Area */
+        .code-display-area {
+            background-color: #21252b; /* Even darker for code background */
+            padding: 20px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            height: 300px; /* Fixed height for consistent look */
+            overflow-y: auto; /* Allow scrolling for long code */
+            position: relative; /* For basic fade transition */
+        }
+
+        .code-block {
+            color: #a0a0a0; /* Base code text color */
+            font-family: 'Fira Code', monospace; /* Monospaced font for code */
+            font-size: 0.85em;
+            line-height: 1.6;
+            opacity: 0; /* Hidden by default */
+            transition: opacity 0.3s ease; /* Simple fade animation */
+            position: absolute; /* Position for overlaying during transition */
+            top: 20px;
+            left: 20px;
+            width: calc(100% - 40px);
+            height: calc(100% - 40px);
+            display: none; /* Hidden by default, JS will manage */
+        }
+
+        .code-block.active {
+            opacity: 1; /* Visible when active */
+            display: block; /* Show the block */
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 600px) {
+            .page-header h1 {
+                font-size: 2.2em;
+            }
+            .page-header p {
+                font-size: 0.9em;
+            }
+            .tab-button {
+                padding: 12px 0;
+                font-size: 0.85em;
+            }
+            .code-display-area {
+                height: 250px; /* Shorter on mobile */
+                padding: 15px;
+            }
+            .code-block {
+                top: 15px;
+                left: 15px;
+                width: calc(100% - 30px);
+                height: calc(100% - 30px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>Code Switcher</h1>
+        <p>A simple, interactive code switcher built with basic HTML, CSS, and JavaScript. Click the tabs to explore different code snippets.</p>
+    </div>
+
+    <div class="code-switcher-container">
+        <div class="tab-buttons">
+            <button id="python-tab" class="tab-button active">
+                Python
+            </button>
+            <button id="javascript-tab" class="tab-button">
+                JavaScript
+            </button>
+            <button id="html-tab" class="tab-button">
+                HTML
+            </button>
+            <button id="css-tab" class="tab-button">
+                CSS
+            </button>
+        </div>
+
+        <div class="code-display-area">
+            <div id="python-code" class="code-block active">
+                <pre><code class="language-python">
+# Python Example
+def greet(name):
+    print(f"Hello, {name}!")
+
+for i in range(3):
+    greet("World")
+
+# Simple calculation
+result = 10 * 5 + 2
+print(f"Result: {result}")
+                </code></pre>
+            </div>
+
+            <div id="javascript-code" class="code-block">
+                <pre><code class="language-javascript">
+// JavaScript Example
+function calculateSum(a, b) {
+    return a + b;
+}
+
+const num1 = 5;
+const num2 = 7;
+const sum = calculateSum(num1, num2);
+console.log(`The sum is: ${sum}`);
+
+document.getElementById('myButton').addEventListener('click', () => {
+    alert('Button clicked!');
+});
+                </code></pre>
+            </div>
+
+            <div id="html-code" class="code-block">
+                <pre><code class="language-html">
+&lt;!-- HTML Example --&gt;
+&lt;div class="card"&gt;
+    &lt;h2&gt;Card Title&lt;/h2&gt;
+    &lt;p&gt;This is some content inside a card.&lt;/p&gt;
+    &lt;button id="myButton"&gt;Learn More&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;Item One&lt;/li&gt;
+    &lt;li&gt;Item Two&lt;/li&gt;
+&lt;/ul&gt;
+                </code></pre>
+            </div>
+
+            <div id="css-code" class="code-block">
+                <pre><code class="language-css">
+/* CSS Example */
+.card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #666;
+    line-height: 1.6;
+}
+                </code></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get all tab buttons and code blocks
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const codeBlocks = document.querySelectorAll('.code-block');
+
+        // Function to show a specific code block and activate its tab
+        function showCode(languageId) {
+            // Deactivate all code blocks and tab buttons
+            codeBlocks.forEach(block => {
+                block.classList.remove('active');
+            });
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Get the selected code block and tab button
+            const selectedCodeBlock = document.getElementById(`${languageId}-code`);
+            const selectedTabButton = document.getElementById(`${languageId}-tab`);
+
+            // Activate the selected code block and tab button
+            if (selectedCodeBlock) {
+                selectedCodeBlock.classList.add('active');
+                selectedCodeBlock.scrollTop = 0; // Scroll to top
+            }
+            if (selectedTabButton) {
+                selectedTabButton.classList.add('active');
+            }
+        }
+
+        // Add click event listeners to tab buttons
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Extract language ID from button ID (e.g., 'python-tab' -> 'python')
+                const languageId = button.id.replace('-tab', '');
+                showCode(languageId);
+            });
+        });
+
+        // Initialize with the first tab active on page load
+        showCode('python');
+    </script>
+</body>
+</html>
